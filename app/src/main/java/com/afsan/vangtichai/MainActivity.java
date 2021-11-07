@@ -6,34 +6,75 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
-    private static String amountGiven = "0";
-    private static TextView savedAmount;
+    private static String amountGiven = "", tempNoteCounter1,tempNoteCounter2,tempNoteCounter5,tempNoteCounter10,tempNoteCounter20,tempNoteCounter50,tempNoteCounter100,tempNoteCounter500;
+    private  TextView ct1;
+    private TextView ct2;
+    private TextView ct5;
+    private TextView ct10;
+    private TextView ct20;
+    private TextView ct50;
+    private TextView ct100;
+    private TextView ct500;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        savedAmount = (TextView)findViewById(R.id.givenAmount);
+        TextView savedAmount = findViewById(R.id.givenAmount);
+        ct1 = findViewById(R.id.ct1);
+        ct2 = findViewById(R.id.ct2);
+        ct5 = findViewById(R.id.ct5);
+        ct10 = findViewById(R.id.ct10);
+        ct20 = findViewById(R.id.ct20);
+        ct50 = findViewById(R.id.nct0);
+        ct100 = findViewById(R.id.ct100);
+        ct500 = findViewById(R.id.ct500);
+
         if(savedInstanceState!=null){
             amountGiven = savedInstanceState.getString("key");
+            tempNoteCounter1 = savedInstanceState.getString("ct1");
+            tempNoteCounter2 = savedInstanceState.getString("ct2");
+            tempNoteCounter5 = savedInstanceState.getString("ct5");
+            tempNoteCounter10 = savedInstanceState.getString("ct10");
+            tempNoteCounter20 = savedInstanceState.getString("ct20");
+            tempNoteCounter50 = savedInstanceState.getString("ct50");
+            tempNoteCounter100 = savedInstanceState.getString("ct100");
+            tempNoteCounter500 = savedInstanceState.getString("ct500");
+
+
         }
         savedAmount.setText(amountGiven);
+        ct1.setText(tempNoteCounter1);
+        ct2.setText(tempNoteCounter2);
+        ct5.setText(tempNoteCounter5);
+        ct10.setText(tempNoteCounter10);
+        ct20.setText(tempNoteCounter20);
+        ct50.setText(tempNoteCounter50);
+        ct100.setText(tempNoteCounter100);
+        ct500.setText(tempNoteCounter500);
 
-        generateVangti(amountGiven);
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString("key", amountGiven);
+        outState.putString("ct1",ct1.getText().toString());
+        outState.putString("ct2",ct2.getText().toString());
+        outState.putString("ct5",ct5.getText().toString());
+        outState.putString("ct10",ct10.getText().toString());
+        outState.putString("ct20",ct20.getText().toString());
+        outState.putString("ct50",ct50.getText().toString());
+        outState.putString("ct100",ct100.getText().toString());
+        outState.putString("ct500",ct500.getText().toString());
+
         super.onSaveInstanceState(outState);
     }
+
 
 
 
@@ -71,19 +112,44 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void clicked(String s){
-        amountGiven = amountGiven + s;
         TextView amount = findViewById(R.id.givenAmount);
-        amount.setText(amountGiven);
         if (s.equals("clear")){
-            amountGiven = "";
-            amount.setText(amountGiven);
+            amountGiven = "0";
+            clearAll();
         }
+        else {
+            if(amountGiven.equals("") || amountGiven.equals("0")){
+                amountGiven = s;
+                amount.setText(amountGiven);
+            }
+            else{
+                amountGiven = amountGiven + s;
+            }
+
+
+
+        }
+        vangtiGererator(amountGiven);
+
+    }
+    public void clearAll(){
+
+        ((TextView)findViewById(R.id.givenAmount)).setText(amountGiven);
+        ((TextView)findViewById(R.id.ct1)).setText("0");
+        ((TextView)findViewById(R.id.ct2)).setText("0");
+        ((TextView)findViewById(R.id.ct5)).setText("0");
+        ((TextView)findViewById(R.id.ct10)).setText("0");
+        ((TextView)findViewById(R.id.ct20)).setText("0");
+        ((TextView)findViewById(R.id.nct0)).setText("0");
+        ((TextView)findViewById(R.id.ct100)).setText("0");
+        ((TextView)findViewById(R.id.ct500)).setText("0");
     }
 
     @SuppressLint("SetTextI18n")
-    public void generateVangti(String s){
+    public void vangtiGererator(String s){
+        clearAll();
         int amount = Integer.parseInt(s);
-        int fiveHundredCounter = 0,oneHundredCounter = 0,fiftyCounter = 0,twentyCounter = 0,tenCounter = 0,fiveCounter = 0,twoCounter = 0,oneCounter = 0;
+        int fiveHundredCounter,oneHundredCounter,fiftyCounter,twentyCounter,tenCounter,fiveCounter,twoCounter,oneCounter;
         if(amount >= 500){
             fiveHundredCounter = amount / 500;
             amount = amount - (fiveHundredCounter*500);
@@ -122,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if(amount == 1 ){
             oneCounter = 1;
-            amount = amount - 1;
             ((TextView)findViewById(R.id.ct1)).setText(Integer.toString(oneCounter));
         }
 
